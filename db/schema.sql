@@ -7,6 +7,12 @@ CREATE TABLE logs (
   date varchar(255),
   processed INTEGER
 );
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY,
+  username varchar(255) UNIQUE,
+  hashed_password varchar(255)
+);
 -- Dbmate schema migrations
 INSERT INTO "schema_migrations" (version) VALUES
-  ('20210404033241');
+  ('20210404033241'),
+  ('20210812195543');

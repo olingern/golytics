@@ -1,5 +1,0 @@
-Last stopping point 4/4/21
-- Clean up insertions / prevent SQL injection
-- Filter out invalid requests
-- Automigration?
-- GET only for CORS
