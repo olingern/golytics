@@ -2,7 +2,6 @@ package clients
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/olingern/golytics/pkg/auth"
@@ -43,8 +42,6 @@ func (c *SqliteClient) LogUserIn(username string, password string) (bool, error)
 	if err != nil && err != sql.ErrNoRows {
 		return false, err
 	}
-
-	fmt.Println(hashedPassword)
 
 	result, err := auth.VerifyPassword([]byte(hashedPassword), []byte(password))
 
