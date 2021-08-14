@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -34,4 +35,13 @@ func TestPasswordFailFlow(t *testing.T) {
 	result, err := VerifyPassword(storedPwd, []byte("BAD_PASSWORD"))
 	assert.Equal(t, err.Error(), "crypto/bcrypt: hashedPassword is not the hash of the given password")
 	assert.False(t, result, "dummyPassword comparison to BAD_PASSWORD should be false")
+}
+
+func TestEnvPasswordIsValid(t *testing.T) {
+	prev := os.Getenv("ADMIN_PASSWORD")
+	os.Setenv("ADMIN_PASSWORD", "fail")
+	assert.False(t, EnvPasswordIsValid(), "password 'fail' does not meet minimum requirements and should faile")
+
+	// reset
+	os.Setenv("ADMIN_PASSWORD", prev)
 }

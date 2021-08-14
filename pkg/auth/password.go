@@ -1,8 +1,20 @@
 package auth
 
 import (
+	"os"
+
 	"golang.org/x/crypto/bcrypt"
 )
+
+func EnvPasswordIsValid() bool {
+	envPassword := os.Getenv("ADMIN_PASSWORD")
+
+	return len(envPassword) >= 6
+}
+
+func GetPasswordFromEnv() string {
+	return os.Getenv("ADMIN_PASSWORD")
+}
 
 func VerifyPassword(storedPasswordHash []byte, givenPassword []byte) (bool, error) {
 

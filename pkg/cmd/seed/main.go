@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/jmoiron/sqlx"
@@ -16,7 +15,7 @@ var err error
 
 func main() {
 
-	fmt.Println("Starting seed ...")
+	log.Println("Starting seed ...")
 
 	err = godotenv.Load()
 
@@ -38,7 +37,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	hashedPwd, err := auth.HashAndSalt([]byte("kagome"))
+	if !auth.EnvPasswordIsValid() {
+		log.Fatal("Environment variable ADMIN_PASSWORD is invalid.")
+	}
+
+	adminPassword := auth.GetPasswordFromEnv()
+	hashedPwd, err := auth.HashAndSalt([]byte(adminPassword))
 
 	if err != nil {
 		log.Fatal(err)
@@ -50,5 +54,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Done.")
+	log.Println("Done.")
 }
