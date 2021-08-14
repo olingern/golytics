@@ -17,20 +17,38 @@ ADMIN_PASSWORD=FOO_BARADMIN_PASSWORD
 SESSION_KEY=FOO_BAR_SESSION_KEY
 DATABASE_LOCATION="./ddbdatabase.sqlite3"
 ```
+## Build
 
-### Seed
+**Seed**
+
+```
+go build -o seed ./pkg/cmd/seed/main.go
+```
+
+**Server**
+
+```
+go build -o seed ./pkg/cmd/server/main.go
+```
+
+## Development
+
+**Seed**
 
 ```
 go run ./pkg/cmd/seed/main.go
 ```
 
-### Server
+**Server**
 
 ```
 go run ./pkg/cmd/server/main.go
 ```
 
-## Feature list
+## Feature / todo list
 
 - [x] Admin login via `POST`
 - [x] In-memory session persistance
+- [ ] Basic JS lib to load on client. ES5 compliant.
+- [ ] Update `Dockerfile` for server build / deployment
+- [ ] Figure out seed check, i.e. should seed be manually run, run controlled by env var, or either.
