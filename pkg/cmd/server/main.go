@@ -15,31 +15,6 @@ import (
 	"github.com/olingern/golytics/pkg/db/clients"
 )
 
-type Log struct {
-	Id        int
-	Ip        string
-	Ua        string
-	Lang      string
-	Date      string
-	Processed int
-}
-
-func checkForNewLogs(db *sqlx.DB) {
-	rr := []Log{}
-
-	for {
-		err := db.Select(&rr, "select * from logs")
-
-		if err != nil {
-			fmt.Println("Error checking for new records")
-			fmt.Println(err)
-		}
-
-		fmt.Printf("[checkForNewLogs] - Found id: %s\n", rr[0].Ua)
-		time.Sleep(10 * time.Second)
-	}
-}
-
 func TrackHandler(w http.ResponseWriter, r *http.Request) {
 	now := time.Now().Format(time.RFC3339)
 	ip := r.Header.Get("X-FORWARDED-FOR")
