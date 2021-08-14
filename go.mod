@@ -4,6 +4,8 @@ go 1.16
 
 require (
 	github.com/gin-gonic/gin v1.7.3
+	github.com/gorilla/mux v1.8.0 // indirect
+	github.com/gorilla/sessions v1.2.1 // indirect
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/joho/godotenv v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.8

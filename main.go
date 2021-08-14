@@ -30,7 +30,7 @@ func checkForNewLogs(db *sqlx.DB) {
 			fmt.Println("Error checking for new records")
 			fmt.Println(err)
 		}
-		
+
 		fmt.Printf("[checkForNewLogs] - Found id: %s\n", rr[0].Ua)
 		time.Sleep(10 * time.Second)
 	}
@@ -54,6 +54,10 @@ func main() {
 	r.Static("/build", "./admin/public/build")
 
 	go checkForNewLogs(db)
+
+	r.POST("/api/users/login", func(c *gin.Context) {
+		c.Status(200)
+	})
 
 	r.GET("/api/dashboard", func(c *gin.Context) {
 		c.Status(200)
