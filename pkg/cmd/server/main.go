@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -40,18 +41,16 @@ func checkForNewLogs(db *sqlx.DB) {
 }
 
 func TrackHandler(w http.ResponseWriter, r *http.Request) {
-	// now := time.Now().Format(time.RFC3339)
-	// ip := r.Header.Get("X-FORWARDED-FOR")
-	// ua := r.Header.Get("user-agent")
-	// lang := r.Header.Get("accept-language")
+	now := time.Now().Format(time.RFC3339)
+	ip := r.Header.Get("X-FORWARDED-FOR")
+	ua := r.Header.Get("user-agent")
+	lang := r.Header.Get("accept-language")
 
-	// _, err := db.Exec(fmt.Sprintf("insert into logs(ip, ua, lang, date, processed) values('%s', '%s', '%s', '%s', '%d')", ip, ua, lang, now, 0))
-	// if err != nil {
-	// 	fmt.Println("Didn't insert")
-	// 	fmt.Println(err)
-	// }
+	// TODO: put this in its own controller
+	fmt.Printf("insert into logs(ip, ua, lang, date, processed) values('%s', '%s', '%s', '%s', '%d')", ip, ua, lang, now, 0)
 
-	// c.Status(200)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 }
 
 func main() {
@@ -62,7 +61,13 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	dbClient, err := sqlx.Open("sqlite3", "./db/database.sqlite3")
+	dbLocation := os.Getenv("DATABASE_LOCATION")
+
+	if _, err := os.Stat(dbLocation); os.IsNotExist(err) {
+		log.Fatalf("Invalid path received. Maybe it doesn't exist?\n Path received: %s", dbLocation)
+	}
+
+	dbClient, err := sqlx.Open("sqlite3", dbLocation)
 
 	if err != nil {
 		log.Fatal("Failed to open sqlite database")
@@ -79,14 +84,7 @@ func main() {
 	ctrl := controllers.NewController(sqlClient)
 
 	r := mux.NewRouter()
-
-	// go checkForNewLogs(db)
-
 	r.HandleFunc("/api/users/login", ctrl.LoginHandler)
-
-	// r.GET("/api/track/view", func(c *gin.Context) {
-
-	// })
 
 	srv := &http.Server{
 		Handler:      r,
@@ -96,6 +94,4 @@ func main() {
 	}
 
 	log.Fatal(srv.ListenAndServe())
-
-	// r.Run()
 }
